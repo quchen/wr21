@@ -1,5 +1,4 @@
 #include "bh1750_light.h"
-// #include "si7021_temperature_humidity.h"
 #include "ws2811_rgb_led.h"
 #include "bme280_temperature_humidity_pressure.h"
 
@@ -10,6 +9,7 @@ void setup_serial() {
     }
     delay(100);
     Serial.println("");
+    Serial.println("Serial set up");
 }
 
 void setup_builtin_led() {
@@ -25,28 +25,19 @@ void setup() {
     setup_builtin_led();
     setup_rgb_led();
     setup_bh1750_light_sensor();
-    // setup_bme280_temperature_humidity_pressure_sensor();
+    setup_bme280_temperature_humidity_pressure_sensor();
 }
 
+float lux, celsius;
 int hue = 0;
+int brightness = 0;
 void loop() {
-    builtin_led_on(true);
-    float lux = measure_light_level_lux();
-    // float celsius = measure_temperature_celsius();
-    // float humidity = measure_rel_humidity();
-    // float hPa = measure_pressure_pascal() / 100;
-    // float altitude = measure_altitude_meters();
-    // Serial.printf("%f,%f,%f,%f,%f\n", lux, celsius, humidity, hPa, altitude);
-    rgb_led.setHSV(hue, 255, 16);
-    hue = (hue + 20) % 256;
-    FastLED.show();
-    delay(50);
-    builtin_led_on(false);
-    delay(1000);
-}
+    lux = measure_light_level_lux();
+    celsius = measure_temperature_celsius();
 
-// void loop() {
-//     float lux = measure_light_level_lux();
-//     int brightness = constrain(map(lux, 50, 100, 255, 0), 0, 255);
-//     rgb_led.setHSV(0, 0, brightness);
-// }
+    brightness = exponential_moving_average(brightness, constrain(map(lux, 75., 100., 255, 0), 0, 255), 0.2);
+    hue = exponential_moving_average(celsius, map(celsius, 20, 30, 0, 255), 0.5);
+    rgb_led.setHSV(hue, 255, brightness);
+    FastLED.show();
+    delay(20);
+}
