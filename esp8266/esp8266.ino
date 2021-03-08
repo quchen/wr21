@@ -1,12 +1,11 @@
 #include "bh1750_light.h"
-
-#include "Adafruit_Si7021.h" // Library: Adafruit Si7021
+#include "si7021_temperature_humidity.h"
 
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #define SEALEVELPRESSURE_HPA (1013.25)
 
-Adafruit_Si7021 tempHumSensor = Adafruit_Si7021();
+
 Adafruit_BME280 thpSensor;
 void setup() {
     Serial.begin(115200);
@@ -32,14 +31,6 @@ void setup() {
 
 void builtin_led_on(bool state) {
     digitalWrite(LED_BUILTIN, state ? LOW : HIGH);
-}
-
-float measure_rel_humidity() {
-    return tempHumSensor.readHumidity();
-}
-
-float measure_temperature_celsius() {
-    return tempHumSensor.readTemperature();
 }
 
 void loop() {
