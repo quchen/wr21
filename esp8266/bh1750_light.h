@@ -6,7 +6,7 @@
 
 BH1750 bh1750_light_sensor;
 
-void setup_light_sensor() {
+void setup_bh1750_light_sensor() {
     Wire.begin();
     bh1750_light_sensor.begin();
 }

@@ -7,7 +7,7 @@
 
 Adafruit_BME280 bme280;
 
-void setup_bme280_temperature_humidity_pressure() {
+void setup_bme280_temperature_humidity_pressure_sensor() {
     unsigned int status = bme280.begin(0x76);
     // You can also pass in a Wire library object like &Wire2
     // status = bme.begin(0x76, &Wire2)
