@@ -10,6 +10,8 @@ CRGB& rgb_led = leds[0];
 void setup_rgb_led() {
     FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
     FastLED.setBrightness(16);
+    rgb_led.setHue(0);
+    FastLED.show();
 }
 
 #endif
