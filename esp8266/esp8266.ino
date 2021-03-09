@@ -39,16 +39,31 @@ void setup() {
     setup_bme280_temperature_humidity_pressure_sensor();
 }
 
-float lux, celsius;
-int hue = 0;
-int brightness = 0;
-void loop() {
-    lux = measure_light_level_lux();
-    celsius = measure_temperature_celsius();
 
-    brightness = ema(brightness, constrain(map(lux, 25., 50., 255, 0), 0, 255), 0.2);
-    hue = ema(celsius, map(celsius, 20, 30, 0, 255), 0.5);
-    rgb_led.setHSV(hue, 255, brightness);
+unsigned long       last_measurement_ms = 0;
+const unsigned long measure_interval_ms = 20;
+unsigned long       now_ms;
+unsigned long       since_last_measurement_ms;
+bool                measurement_outstanding;
+
+float lux, celsius;
+int led_hue = 0;
+int led_brightness = 0;
+const float dark_lux = 50;
+const float bright_lux = 150;
+void loop() {
+    now_ms = millis();
+    since_last_measurement_ms = now_ms - last_measurement_ms;
+    measurement_outstanding = since_last_measurement_ms > measure_interval_ms;
+    if(measurement_outstanding) {
+        last_measurement_ms = now_ms;
+        lux = measure_light_level_lux();
+        celsius = measure_temperature_celsius();
+    }
+
+    led_brightness = ema(led_brightness, constrain(map(lux, bright_lux, dark_lux, 0, 255), 0, 255), 0.1);
+    led_hue = ema(led_hue, map(celsius, 20, 30, 0, 255), 0.1);
+    rgb_led.setHSV(led_hue, 255, led_brightness);
     FastLED.show();
     delay(20);
 }
