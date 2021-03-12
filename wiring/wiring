@@ -1,0 +1,6 @@
+- [Red] Long red cable from ESP’s Vin (next to USB) to 5V of the (red) LED board
+- [Red] ESP’s 3V3 to VIN of the purple board
+- [Black] ESP’s GND to the purple and LED board’s GND
+- [Orange] ESP’s D4 pin to DI of the LED board
+- [Gree or white] ESP’s D2 to purple board’s SDA
+- [Yellow] ESP’s D1 to purple board’s SCL
