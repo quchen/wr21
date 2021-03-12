@@ -28,22 +28,33 @@ void setup_wifi() {
     Serial.println("Got IP: " + WiFi.localIP().toString());
 }
 
-void handle_OnConnect() {
-    String response = "";
-    response += "temperature[C]:  " + String(measure_light_level_lux()) + "\n";
-    response += "humidity[rel%]:  " + String(measure_rel_humidity()) + "\n";
-    response += "pressure[hPa]:   " + String(measure_pressure_pascal()) + "\n";
-    response += "brightness[lux]: " + String(measure_temperature_celsius()) + "\n";
-    server.send(200, "text/plain", response);
-}
-
-void handle_NotFound(){
-    server.send(404, "text/plain", "Not found");
-}
-
+int h = 0;
+int s = 0;
+int v = 0;
 void setup_http_server() {
-    server.on("/", handle_OnConnect);
-    server.onNotFound(handle_NotFound);
+    server.on("/", [](){
+        String response = "";
+        response += "temperature[C]:  " + String(measure_light_level_lux()) + "\n";
+        response += "humidity[rel%]:  " + String(measure_rel_humidity()) + "\n";
+        response += "pressure[hPa]:   " + String(measure_pressure_pascal()) + "\n";
+        response += "brightness[lux]: " + String(measure_temperature_celsius()) + "\n";
+        server.send(200, "text/plain", response);
+    });
+    server.on("/led", [](){
+        if(server.method() != HTTP_POST) {
+            server.send(405, "text/plain", "Method Not Allowed");
+        } else {
+            server.send(200, "text/plain", "POST body was:\n" + server.arg("plain"));
+            {String arg = server.arg("h"); if(arg != "") { h = arg.toInt(); }}
+            {String arg = server.arg("s"); if(arg != "") { s = arg.toInt(); }}
+            {String arg = server.arg("v"); if(arg != "") { v = arg.toInt(); }}
+            rgb_led.setHSV(h, s, v);
+            FastLED.show();
+        }
+    });
+    server.onNotFound([]() {
+        server.send(404, "text/plain", "Not found");
+    });
     server.begin();
     Serial.println("Server started");
 }
@@ -52,6 +63,7 @@ void setup() {
     setup_serial();
     setup_bh1750_light_sensor();
     setup_bme280_temperature_humidity_pressure_sensor();
+    setup_rgb_led();
     setup_wifi();
     setup_http_server();
 }
