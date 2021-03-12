@@ -1,7 +1,7 @@
+#include "hidden.h"
 #include "lib/bh1750_light.h"
 #include "lib/bme280_temperature_humidity_pressure.h"
 #include "lib/ws2811_rgb_led.h"
-#include "wifi_credentials.h"
 #include <ESP8266WebServer.h>
 #include <uri/UriBraces.h>
 
@@ -38,12 +38,12 @@ void setup_http_server() {
             server.send(405, "text/plain", "Can only GET here!");
             return;
         }
-        String response = "";
-        response += "temperature[C]:   " + String(measure_light_level_lux()) + "\n";
-        response += "humidity[rel%]:   " + String(measure_rel_humidity()) + "\n";
-        response += "pressure[Pa]:     " + String(measure_pressure_pascal()) + "\n";
-        response += "illuminance[lux]: " + String(measure_temperature_celsius()) + "\n";
-        server.send(200, "text/plain", response);
+        String payload = "";
+        payload += "temperature[C]:   " + String(measure_light_level_lux()) + "\n";
+        payload += "humidity[rel%]:   " + String(measure_rel_humidity()) + "\n";
+        payload += "pressure[Pa]:     " + String(measure_pressure_pascal()) + "\n";
+        payload += "illuminance[lux]: " + String(measure_temperature_celsius()) + "\n";
+        server.send(200, "text/plain", payload);
     });
 
     server.on(UriBraces("/hsv/{}/{}/{}"), [](){
