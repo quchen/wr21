@@ -10,7 +10,7 @@ CRGB& rgb_led = __leds[0];
 void setup_rgb_led() {
     FastLED.addLeds<NEOPIXEL, DATA_PIN>(__leds, NUM_LEDS);
     // FastLED.setBrightness(16); // AAAAAAA MY EYES
-    rgb_led.setHSV(0, 255, 16);
+    FastLED.clear();
     FastLED.show();
 }
 
