@@ -28,7 +28,6 @@ void setup_builtin_leds() {
     pinMode(LED2_BUILTIN, OUTPUT);
     builtin_led_on(false);
     builtin_led2_on(false);
-    pinMode(14, INPUT_PULLUP);
 }
 
 void setup() {
