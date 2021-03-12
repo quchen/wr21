@@ -1,7 +1,7 @@
-#include "lib/util.h"
 #include "lib/bh1750_light.h"
-#include "lib/ws2811_rgb_led.h"
 #include "lib/bme280_temperature_humidity_pressure.h"
+#include "lib/util.h"
+#include "lib/ws2811_rgb_led.h"
 
 void setup_serial() {
     Serial.begin(115200);
@@ -13,31 +13,12 @@ void setup_serial() {
     Serial.println("Serial set up");
 }
 
-#define LED2_BUILTIN (2)
-
-void builtin_led_on(bool on) {
-    digitalWrite(LED_BUILTIN, on ? LOW : HIGH);
-}
-
-void builtin_led2_on(bool on) {
-    digitalWrite(LED2_BUILTIN, on ? LOW : HIGH);
-}
-
-void setup_builtin_leds() {
-    pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(LED2_BUILTIN, OUTPUT);
-    builtin_led_on(false);
-    builtin_led2_on(false);
-}
-
 void setup() {
     setup_serial();
-    setup_builtin_leds();
     setup_rgb_led();
     setup_bh1750_light_sensor();
     setup_bme280_temperature_humidity_pressure_sensor();
 }
-
 
 unsigned long       last_measurement_ms = 0;
 const unsigned long measure_interval_ms = 20;
