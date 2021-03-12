@@ -1,6 +1,6 @@
-#include "bh1750_light.h"
-#include "ws2811_rgb_led.h"
-#include "bme280_temperature_humidity_pressure.h"
+#include "lib/bh1750_light.h"
+#include "lib/ws2811_rgb_led.h"
+#include "lib/bme280_temperature_humidity_pressure.h"
 #include "wifi_credentials.h"
 #include <ESP8266WebServer.h>
 
