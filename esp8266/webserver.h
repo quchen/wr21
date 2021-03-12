@@ -39,10 +39,10 @@ void setup_http_server() {
             return;
         }
         String response = "";
-        response += "temperature[C]:  " + String(measure_light_level_lux()) + "\n";
-        response += "humidity[rel%]:  " + String(measure_rel_humidity()) + "\n";
-        response += "pressure[hPa]:   " + String(measure_pressure_pascal()) + "\n";
-        response += "brightness[lux]: " + String(measure_temperature_celsius()) + "\n";
+        response += "temperature[C]:   " + String(measure_light_level_lux()) + "\n";
+        response += "humidity[rel%]:   " + String(measure_rel_humidity()) + "\n";
+        response += "pressure[Pa]:     " + String(measure_pressure_pascal()) + "\n";
+        response += "illuminance[lux]: " + String(measure_temperature_celsius()) + "\n";
         server.send(200, "text/plain", response);
     });
 
