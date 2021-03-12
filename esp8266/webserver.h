@@ -3,6 +3,7 @@
 #include "lib/bme280_temperature_humidity_pressure.h"
 #include "wifi_credentials.h"
 #include <ESP8266WebServer.h>
+#include <uri/UriBraces.h>
 
 ESP8266WebServer server(80);
 
@@ -33,6 +34,10 @@ int s = 0;
 int v = 0;
 void setup_http_server() {
     server.on("/", [](){
+        if(server.method() != HTTP_GET) {
+            server.send(405, "text/plain", "Can only GET here!");
+            return;
+        }
         String response = "";
         response += "temperature[C]:  " + String(measure_light_level_lux()) + "\n";
         response += "humidity[rel%]:  " + String(measure_rel_humidity()) + "\n";
@@ -40,30 +45,33 @@ void setup_http_server() {
         response += "brightness[lux]: " + String(measure_temperature_celsius()) + "\n";
         server.send(200, "text/plain", response);
     });
-    server.on("/led", [](){
+
+    server.on(UriBraces("/hsv/{}/{}/{}"), [](){
         if(server.method() != HTTP_POST) {
-            server.send(405, "text/plain", "Method Not Allowed");
-        } else {
-            server.send(200, "text/plain", "POST body was:\n" + server.arg("plain"));
-            {String arg = server.arg("h"); if(arg != "") { h = arg.toInt(); }}
-            {String arg = server.arg("s"); if(arg != "") { s = arg.toInt(); }}
-            {String arg = server.arg("v"); if(arg != "") { v = arg.toInt(); }}
-            rgb_led.setHSV(h, s, v);
-            FastLED.show();
+            server.send(405, "text/plain", "Can only POST here!");
+            return;
         }
+        h = server.pathArg(0).toInt();
+        s = server.pathArg(1).toInt();
+        v = server.pathArg(2).toInt();
+        rgb_led.setHSV(h, s, v);
+        server.send(200, "text/plain", "LED set to h,s,v = " + String(h) + "," + String(s) + "," + String(v));
+        FastLED.show();
     });
+
     server.onNotFound([]() {
         server.send(404, "text/plain", "Not found");
     });
+
     server.begin();
     Serial.println("Server started");
 }
 
 void setup() {
     setup_serial();
+    setup_rgb_led();
     setup_bh1750_light_sensor();
     setup_bme280_temperature_humidity_pressure_sensor();
-    setup_rgb_led();
     setup_wifi();
     setup_http_server();
 }
