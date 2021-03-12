@@ -75,7 +75,7 @@ void measure_every_ms(const unsigned long measure_interval_ms) {
     measurement_outstanding = since_last_measurement_ms > measure_interval_ms;
     if(measurement_outstanding) {
         last_measurement_ms = now_ms;
-        rgb_led.setHSV(120, 255, 255);
+        rgb_led.setHSV(random(0, 256), 255, 255);
         FastLED.show();
         String payload = "";
         payload += "temperature[C]: "   + String(measure_light_level_lux()) + ", ";
