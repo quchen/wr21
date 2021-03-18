@@ -19,6 +19,7 @@ void setup_serial() {
 
 void setup_wifi() {
     Serial.println("Connecting to Wifi…");
+    WiFi.hostname("esp8266");
     WiFi.begin(WIFI_SSID, WIFI_PASS);
 
     while (WiFi.status() != WL_CONNECTED) {
@@ -39,10 +40,10 @@ void setup_http_server() {
             return;
         }
         String payload = "";
-        payload += "temperature[C]:   " + String(measure_light_level_lux()) + "\n";
+        payload += "temperature[C]:   " + String(measure_temperature_celsius()) + "\n";
         payload += "humidity[rel%]:   " + String(measure_rel_humidity()) + "\n";
         payload += "pressure[Pa]:     " + String(measure_pressure_pascal()) + "\n";
-        payload += "illuminance[lux]: " + String(measure_temperature_celsius()) + "\n";
+        payload += "illuminance[lux]: " + String(measure_light_level_lux()) + "\n";
         server.send(200, "text/plain", payload);
     });
 
