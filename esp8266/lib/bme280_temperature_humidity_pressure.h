@@ -2,7 +2,7 @@
 #define BME280_TEMPERATURE_HUMIDITY_PRESSURE_H
 
 #include <Adafruit_Sensor.h>
-#include <Adafruit_BME280.h>
+#include <Adafruit_BME280.h> // BME280 by Adafruit
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 Adafruit_BME280 __bme280;
