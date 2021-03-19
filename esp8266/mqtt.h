@@ -78,10 +78,10 @@ void measure_every_ms(const unsigned long measure_interval_ms) {
         rgb_led.setHSV(random(0, 256), 255, 255);
         FastLED.show();
         String payload = "";
-        payload += "temperature[C]: "   + String(measure_light_level_lux()) + ", ";
+        payload += "temperature[C]: "   + String(measure_temperature_celsius()) + ", ";
         payload += "humidity[rel%]: "   + String(measure_rel_humidity())    + ", ";
         payload += "pressure[Pa]: "     + String(measure_pressure_pascal()) + ", ";
-        payload += "illuminance[lux]: " + String(measure_temperature_celsius());
+        payload += "illuminance[lux]: " + String(measure_light_level_lux());
         mqtt.publish("WR/21/measurement", payload.c_str());
         FastLED.clear();
         FastLED.show();

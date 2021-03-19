@@ -11,7 +11,6 @@ ICACHE_RAM_ATTR void toggle() {
 
 void setup() {
   Serial.begin(115200);
-  
   setup_rgb_led();
   rgb_led = CRGB::White;
   FastLED.setBrightness(0);
